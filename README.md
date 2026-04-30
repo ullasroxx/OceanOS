@@ -109,7 +109,7 @@ OceanOS/
 ### 1. Clone the Repository
 
 ```bash
-git clone (https://github.com/ullasroxx/OceanOS.git)
+git clone (https://github.com/ullasroxx/OceanOS.git) 
 cd 
 ```
 
