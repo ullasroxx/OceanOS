@@ -1,0 +1,310 @@
+/* ═══════════════════════════════════
+   OCEAN POLLUTION SIMULATOR - STYLES
+   ═══════════════════════════════════ */
+
+:root {
+  --primary: #00e5ff;
+  --danger: #ff1744;
+  --success: #00e676;
+  --warning: #ffab00;
+  --bg-dark: rgba(10, 15, 30, 0.85);
+  --bg-glass: rgba(10, 20, 40, 0.6);
+  --border-glow: rgba(0, 229, 255, 0.3);
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: #000;
+  font-family: var(--font-body);
+  color: #e0e8f0;
+}
+
+/* ── Loading Screen ── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a0e1a 0%, #0d1b2a 50%, #1b2838 100%);
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.loader-content h1 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-top: 30px;
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+}
+
+.loader-content p {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #7a8fa6;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.loader-ring {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border: 4px solid rgba(0, 229, 255, 0.15);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Canvas ── */
+#simulation-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── HUD Overlay ── */
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#hud > * {
+  pointer-events: auto;
+}
+
+/* Top Bar */
+#hud-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 30px;
+  background: linear-gradient(180deg, rgba(5, 10, 20, 0.8) 0%, transparent 100%);
+}
+
+#hud-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+/* Alert Panel */
+#alert-panel {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  width: 300px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glow);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+#alert-indicator {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#alert-light {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 16px var(--success), 0 0 40px rgba(0, 230, 118, 0.3);
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+  flex-shrink: 0;
+}
+
+#alert-light.red {
+  background: var(--danger);
+  box-shadow: 0 0 16px var(--danger), 0 0 40px rgba(255, 23, 68, 0.4);
+  animation: pulse-red 1s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 16px var(--danger), 0 0 40px rgba(255, 23, 68, 0.3); }
+  50% { box-shadow: 0 0 24px var(--danger), 0 0 60px rgba(255, 23, 68, 0.6); }
+}
+
+#alert-status {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+#alert-status.danger {
+  color: var(--danger);
+}
+
+/* Pollution Bar */
+#pollution-bar-container {
+  margin-bottom: 16px;
+}
+
+#pollution-bar-container label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #7a8fa6;
+  display: block;
+  margin-bottom: 8px;
+}
+
+#pollution-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#pollution-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+  transition: width 0.3s ease;
+}
+
+#pollution-percent {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* Stats */
+#stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #7a8fa6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.stat-value.good { color: var(--success); }
+.stat-value.warning { color: var(--warning); }
+.stat-value.danger { color: var(--danger); }
+
+/* Control Buttons */
+#controls-panel {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border: 1px solid var(--border-glow);
+  border-radius: 10px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.control-btn:hover {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.control-btn.danger {
+  border-color: rgba(255, 23, 68, 0.4);
+  color: var(--danger);
+}
+
+.control-btn.danger:hover {
+  background: rgba(255, 23, 68, 0.15);
+  border-color: var(--danger);
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #alert-panel {
+    width: 240px;
+    padding: 14px;
+    top: 60px;
+    right: 10px;
+  }
+
+  #hud-title {
+    font-size: 0.8rem;
+  }
+
+  .control-btn {
+    padding: 10px 16px;
+    font-size: 0.65rem;
+  }
+}

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OceanOS System Architecture Flowchart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+    .header-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: #2563eb;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+    header p {
+      color: #64748b;
+      font-size: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .flowchart-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      padding: 40px 20px;
+      margin-bottom: 20px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .zone-label { font-family: 'Inter'; font-size: 12px; font-weight: 600; fill: #64748b; letter-spacing: 1px; }
+    .node-title { font-family: 'Inter'; font-size: 14px; font-weight: 600; fill: #0f172a; }
+    .node-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #64748b; }
+    .path-label { font-family: 'Inter'; font-size: 11px; font-weight: 500; fill: #2563eb; background: #fff; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #475569;
+    }
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-badge">SYSTEM ARCHITECTURE</div>
+    <h1>OceanOS Platform Flowchart</h1>
+    <p>A clean, non-overlapping architectural view of data flows, network boundaries, and independent modules.</p>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#2563eb;"></div>Primary Flow</div>
+    <div class="legend-item"><div class="legend-color" style="background:#0ea5e9;"></div>WebSocket Broadcast</div>
+    <div class="legend-item"><div class="legend-color" style="background:#eab308;"></div>Database Query</div>
+    <div class="legend-item"><div class="legend-color" style="background:#10b981;"></div>Standalone</div>
+  </div>
+
+  <div class="flowchart-wrapper">
+    <svg viewBox="0 0 1200 1100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow-blue" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+        </marker>
+        <marker id="arrow-cyan" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6" fill="none" stroke="#0ea5e9" stroke-width="1.5"/>
+        </marker>
+        <marker id="arrow-yellow" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6" fill="none" stroke="#eab308" stroke-width="1.5"/>
+        </marker>
+        <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.04"/>
+        </filter>
+
+        <!-- Node Icons -->
+        <g id="icon-dash" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></g>
+        <g id="icon-mobile" fill="none" stroke="#2563eb" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></g>
+        <g id="icon-webgl" fill="none" stroke="#2563eb" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></g>
+        <g id="icon-server" fill="none" stroke="#0ea5e9" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></g>
+        <g id="icon-socket" fill="none" stroke="#0ea5e9" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></g>
+        <g id="icon-db" fill="none" stroke="#eab308" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></g>
+        <g id="icon-stand" fill="none" stroke="#10b981" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></g>
+        <g id="icon-cloud" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></g>
+      </defs>
+
+      <!-- ════════════ ZONES ════════════ -->
+      
+      <!-- Zone 1: Browsers -->
+      <rect x="50" y="50" width="1100" height="150" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="70" y="80" class="zone-label">BROWSER CLIENTS</text>
+
+      <!-- Zone 2: Backend -->
+      <rect x="50" y="280" width="1100" height="150" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="70" y="310" class="zone-label">BACKEND SERVICES (NODE.JS)</text>
+
+      <!-- Zone 3: Database -->
+      <rect x="50" y="510" width="1100" height="150" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="70" y="540" class="zone-label">LOCAL DATABASE</text>
+
+      <!-- Zone 4: External -->
+      <rect x="50" y="740" width="1100" height="120" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="70" y="770" class="zone-label">EXTERNAL CLOUD SERVICES</text>
+
+      <!-- Zone 5: Standalone -->
+      <rect x="50" y="920" width="1100" height="150" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="70" y="950" class="zone-label">STANDALONE APP FRAMEWORKS (NO SERVER REQUIRED)</text>
+
+
+      <!-- ════════════ CONNECTING LINES ════════════ -->
+
+      <!-- R1 -> R2 (Browsers to Backend) -->
+      
+      <!-- Dash (180) -> Express (180) -->
+      <path d="M 180 170 L 180 320" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      
+      <!-- Fisher (550) -> WS (550) -->
+      <path d="M 550 170 L 550 320" fill="none" stroke="#0ea5e9" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+      <text x="560" y="250" class="path-label">WebSocket</text>
+      
+      <!-- Fisher (550) -> Express (180) -->
+      <path d="M 450 140 L 410 140 L 410 250 L 250 250 L 250 320" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      
+      <!-- Main (920) -> Express (180) -->
+      <path d="M 920 170 L 920 220 L 280 220 L 280 320" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      
+      <!-- Main (920) -> WS (550) -->
+      <path d="M 820 140 L 780 140 L 780 250 L 610 250 L 610 320" fill="none" stroke="#0ea5e9" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+      <!-- Express (180) -> WS (550) Internal Broadcast -->
+      <path d="M 280 350 L 450 350" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-cyan)"/>
+      
+      <!-- Express (180) -> Gemini Handler (920) -->
+      <path d="M 280 380 L 820 380" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-blue)"/>
+
+
+      <!-- R2 -> R3 (Backend to DB) -->
+      <!-- Express (180) -> DB (180) -->
+      <path d="M 180 400 L 180 550" fill="none" stroke="#eab308" stroke-width="2" marker-end="url(#arrow-yellow)"/>
+      <text x="190" y="480" class="path-label" fill="#ca8a04">SQL</text>
+
+      
+      <!-- R2 -> R4 (Backend to External) -->
+      <!-- Gemini Handler (920) -> Gemini API (920) -->
+      <path d="M 920 400 L 920 780" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      <text x="930" y="600" class="path-label">HTTPS POST</text>
+
+
+      <!-- ════════════ NODES ════════════ -->
+
+      <!-- Row 1: Browsers (y=110) -->
+      <!-- Admin Dashboard -->
+      <g transform="translate(80, 110)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-dash" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Admin Dashboard</text>
+        <text x="52" y="48" class="node-sub">Port: 3002</text>
+      </g>
+      
+      <!-- Fisherman App -->
+      <g transform="translate(450, 110)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-mobile" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Fisherman App</text>
+        <text x="52" y="48" class="node-sub">Port: 3003</text>
+      </g>
+
+      <!-- Main Sim -->
+      <g transform="translate(820, 110)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-webgl" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Main Simulation</text>
+        <text x="52" y="48" class="node-sub">Port: 3004</text>
+      </g>
+
+
+      <!-- Row 2: Backend (y=340) -->
+      <!-- Express Server -->
+      <g transform="translate(80, 340)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-server" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Express API</text>
+        <text x="52" y="48" class="node-sub">REST Endpoints</text>
+      </g>
+
+      <!-- WebSocket -->
+      <g transform="translate(450, 340)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-socket" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">WebSocket Server</text>
+        <text x="52" y="48" class="node-sub">ws:// Events</text>
+      </g>
+
+      <!-- Gemini Handler -->
+      <g transform="translate(820, 340)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-server" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Gemini Handler</text>
+        <text x="52" y="48" class="node-sub">/api/gemini wrapper</text>
+      </g>
+
+
+      <!-- Row 3: Database (y=570) -->
+      <g transform="translate(80, 570)">
+        <rect width="1040" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#eab308" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-db" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">sql.js (SQLite In-Memory)</text>
+        <text x="52" y="48" class="node-sub">Tables: plastic_col, drone_det, pollution_evt, river_col, notifications, marine_stats, fishing_zones...</text>
+      </g>
+
+
+      <!-- Row 4: External (y=780) -->
+      <!-- CDN -->
+      <g transform="translate(80, 780)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-cloud" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">jsDelivr & Fonts CDN</text>
+        <text x="52" y="48" class="node-sub">Three.js / Chart.js</text>
+      </g>
+      
+      <!-- Gemini API -->
+      <g transform="translate(820, 780)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-cloud" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Google Gemini Flash</text>
+        <text x="52" y="48" class="node-sub">External AI API</text>
+      </g>
+
+
+      <!-- Row 5: Standalone Sims (y=980) -->
+      <!-- Drone Sim -->
+      <g transform="translate(100, 980)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-stand" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Drone Patrol Sim</text>
+        <text x="52" y="48" class="node-sub">Vanilla Canvas 2D</text>
+      </g>
+
+      <!-- Pollution Sim -->
+      <g transform="translate(360, 980)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-stand" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Pollution Alert Sim</text>
+        <text x="52" y="48" class="node-sub">Vanilla Canvas 2D</text>
+      </g>
+
+      <!-- River Sim -->
+      <g transform="translate(620, 980)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-stand" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">River Collector Sim</text>
+        <text x="52" y="48" class="node-sub">Vite + React/TS</text>
+      </g>
+
+      <!-- Ocean Boom Sim -->
+      <g transform="translate(880, 980)">
+        <rect width="200" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow)"/>
+        <line x1="0" y1="8" x2="0" y2="52" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+        <use href="#icon-stand" x="16" y="18" width="24" height="24" />
+        <text x="52" y="30" class="node-title">Ocean Boom Sim</text>
+        <text x="52" y="48" class="node-sub">Vite + React/TS</text>
+      </g>
+
+    </svg>
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ocean Cleanup 3D Simulation - Visualize how plastic debris is collected from oceans using floating boom systems and collection ships" />
+  <title>Ocean Cleanup 3D Simulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="simulation-canvas"></canvas>
+
+  <!-- 3D Hover Tooltip -->
+  <div id="hover-tooltip" class="hover-tooltip hidden">
+    <div class="tooltip-title" id="tooltip-title"></div>
+    <div class="tooltip-desc" id="tooltip-desc"></div>
+  </div>
+
+  <!-- Top HUD Bar -->
+  <div id="hud-top">
+    <div class="hud-title">
+      <span class="title-icon">🌊</span>
+      <span>OCEAN CLEANUP SIMULATION</span>
+    </div>
+    <div class="hud-controls">
+      <button id="btn-play" class="hud-btn active" title="Play">▶</button>
+      <button id="btn-pause" class="hud-btn" title="Pause">⏸</button>
+      <button id="btn-speed" class="hud-btn" title="Speed">1×</button>
+      <button id="btn-reset" class="hud-btn" title="Reset">↺</button>
+      <div class="camera-controls">
+        <button id="cam-orbit" class="hud-btn cam-btn active" title="Orbit View">🔄</button>
+        <button id="cam-top" class="hud-btn cam-btn" title="Top-Down View">⬇</button>
+        <button id="cam-side" class="hud-btn cam-btn" title="Side View">➡</button>
+        <button id="cam-boom" class="hud-btn cam-btn" title="Boom Close-up">🎯</button>
+        <button id="cam-ship" class="hud-btn cam-btn" title="Ship Follow">🚢</button>
+        <button id="cam-free" class="hud-btn cam-btn" title="Free Look (Drag)">🖱</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Panel: Environment Data -->
+  <div id="panel-left" class="hud-panel">
+    <div class="panel-header">
+      <span class="panel-icon">🌤</span> ENVIRONMENT
+    </div>
+    <div class="panel-content">
+      <div class="data-row">
+        <span class="data-label">Wind Speed</span>
+        <span class="data-value" id="wind-speed">12.4 km/h</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Wind Direction</span>
+        <span class="data-value" id="wind-dir">NW</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Wave Height</span>
+        <span class="data-value" id="wave-height">1.2 m</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Tide Status</span>
+        <span class="data-value" id="tide-status">Rising</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Current Speed</span>
+        <span class="data-value" id="current-speed">0.8 m/s</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Water Temp</span>
+        <span class="data-value" id="water-temp">18.3°C</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Collection Data -->
+  <div id="panel-right" class="hud-panel">
+    <div class="panel-header">
+      <span class="panel-icon">📊</span> COLLECTION DATA
+    </div>
+    <div class="panel-content">
+      <div class="data-row highlight">
+        <span class="data-label">Plastic Collected</span>
+        <span class="data-value" id="plastic-collected">0 kg</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Bottles</span>
+        <span class="data-value" id="bottles-count">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Bags</span>
+        <span class="data-value" id="bags-count">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Containers</span>
+        <span class="data-value" id="containers-count">0</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Other Debris</span>
+        <span class="data-value" id="other-count">0</span>
+      </div>
+      <div class="data-row highlight">
+        <span class="data-label">Ship Capacity</span>
+        <span class="data-value" id="ship-capacity">0%</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Collection Cycles</span>
+        <span class="data-value" id="cycles-count">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphs Panel (Bottom Right) -->
+  <div id="panel-graphs" class="hud-panel graphs-panel">
+    <div class="panel-header">
+      <span class="panel-icon">📈</span> LIVE ANALYTICS
+      <button id="toggle-graphs" class="hud-btn mini-btn" title="Toggle graphs">−</button>
+    </div>
+    <div class="graphs-body" id="graphs-body">
+      <div class="graph-container">
+        <div class="graph-label">Plastic Collected (kg) over Time</div>
+        <canvas id="graph-plastic" width="320" height="100"></canvas>
+      </div>
+      <div class="graph-container">
+        <div class="graph-label">Ship Capacity (%)</div>
+        <canvas id="graph-capacity" width="320" height="80"></canvas>
+      </div>
+      <div class="graph-container">
+        <div class="graph-label">Wind Speed (km/h)</div>
+        <canvas id="graph-wind" width="320" height="80"></canvas>
+      </div>
+      <div class="graph-container">
+        <div class="graph-label">Wave Height (m)</div>
+        <canvas id="graph-wave" width="320" height="80"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Status Bar -->
+  <div id="status-bar">
+    <div class="status-section">
+      <span class="status-dot active"></span>
+      <span id="system-status">SYSTEM ACTIVE</span>
+    </div>
+    <div class="status-section" id="activity-log">
+      <span id="activity-text">Initializing cleanup operation...</span>
+    </div>
+    <div class="status-section">
+      <span id="sim-time">00:00:00</span>
+    </div>
+  </div>
+
+  <!-- Info Overlay -->
+  <div id="info-overlay" class="info-overlay">
+    <div class="info-card">
+      <h2>How Ocean Cleanup Works</h2>
+      <div class="info-steps">
+        <div class="info-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Floating Boom System</strong> — Two boats deploy a U-shaped floating barrier across the ocean current path.</div>
+        </div>
+        <div class="info-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Passive Collection</strong> — Ocean currents push floating plastic debris into the U-shaped boom. Nets below the waterline trap the waste.</div>
+        </div>
+        <div class="info-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Ship Collection</strong> — A large vessel arrives periodically to collect the accumulated plastic and transport it for recycling.</div>
+        </div>
+      </div>
+      <p class="info-hint">💡 Hover over objects in the 3D scene to see labels. Use camera buttons to change views.</p>
+      <button id="close-info" class="hud-btn">Got it — Start Simulation</button>
+    </div>
+  </div>
+
+  <button id="btn-info" class="info-btn" title="How it works">?</button>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

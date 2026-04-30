@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OceanOS Unified 3D Simulation - Ocean cleanup, drone patrols, river collection, pollution monitoring in a single world" />
+  <title>OceanOS | Unified World Simulation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; overflow: hidden; background: #000; }
+    canvas { display: block; width: 100%; height: 100%; }
+
+    /* Loading */
+    #loading { position: fixed; inset: 0; background: #0a0e1a; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s; }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    #loading h1 { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #14b8a6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    #loading p { color: #64748b; font-size: 14px; }
+    .load-bar { width: 200px; height: 3px; background: #1e2a45; border-radius: 2px; margin-top: 20px; overflow: hidden; }
+    .load-fill { width: 0; height: 100%; background: linear-gradient(90deg, #3b82f6, #14b8a6); border-radius: 2px; animation: loadAnim 2s ease forwards; }
+    @keyframes loadAnim { to { width: 100%; } }
+
+    /* HUD */
+    #hud { position: fixed; top: 0; left: 0; right: 0; z-index: 50; pointer-events: none; }
+
+    #top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      background: rgba(10,14,26,0.85);
+      border-bottom: 1px solid rgba(30,42,69,0.6);
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+
+    .tb-left { display: flex; align-items: center; gap: 12px; }
+    .tb-logo { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #14b8a6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .tb-badge { font-size: 9px; font-weight: 600; padding: 2px 8px; background: #3b82f6; color: white; border-radius: 20px; letter-spacing: 1px; }
+
+    .tb-right { display: flex; align-items: center; gap: 16px; }
+    .tb-link { color: #94a3b8; text-decoration: none; font-size: 12px; font-weight: 500; padding: 6px 12px; border: 1px solid #1e2a45; border-radius: 6px; transition: all 0.2s; }
+    .tb-link:hover { border-color: #3b82f6; color: #60a5fa; background: rgba(59,130,246,0.08); }
+
+    /* Zone Navigation */
+    #zone-nav {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 50;
+      background: rgba(10,14,26,0.9);
+      border: 1px solid rgba(30,42,69,0.6);
+      border-radius: 12px;
+      padding: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .zone-btn {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid #1e2a45;
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+
+    .zone-btn:hover { border-color: #3b82f6; color: #60a5fa; }
+    .zone-btn.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+
+    /* Info Panel */
+    #info-panel {
+      position: fixed; top: 60px; right: 16px;
+      width: 260px;
+      background: rgba(10,14,26,0.9);
+      border: 1px solid rgba(30,42,69,0.6);
+      border-radius: 10px;
+      padding: 16px;
+      backdrop-filter: blur(10px);
+      z-index: 50;
+      font-size: 12px;
+    }
+
+    #info-panel h3 { font-size: 14px; margin-bottom: 10px; color: #e2e8f0; }
+
+    .info-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(30,42,69,0.4); }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: #64748b; }
+    .info-val { color: #e2e8f0; font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+    /* Live Stats */
+    #live-stats {
+      position: fixed; top: 60px; left: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      z-index: 50;
+    }
+
+    .live-stat {
+      background: rgba(10,14,26,0.85);
+      border: 1px solid rgba(30,42,69,0.5);
+      border-radius: 8px;
+      padding: 10px 14px;
+      backdrop-filter: blur(10px);
+      min-width: 160px;
+    }
+
+    .live-stat-val { font-size: 20px; font-weight: 700; color: #60a5fa; font-family: 'JetBrains Mono', monospace; }
+    .live-stat-lbl { font-size: 10px; color: #64748b; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <!-- Loading -->
+  <div id="loading">
+    <h1>OceanOS World</h1>
+    <p>Loading Unified Simulation...</p>
+    <div class="load-bar"><div class="load-fill"></div></div>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="sim-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="top-bar">
+      <div class="tb-left">
+        <span class="tb-logo">OceanOS World</span>
+        <span class="tb-badge">SIMULATION</span>
+      </div>
+      <div class="tb-right">
+        <a class="tb-link" href="http://localhost:3002" target="_blank">Dashboard</a>
+        <a class="tb-link" href="http://localhost:3003" target="_blank">Fisher App</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zone Navigation -->
+  <div id="zone-nav">
+    <button class="zone-btn active" data-zone="overview">Overview</button>
+    <button class="zone-btn" data-zone="ocean-cleanup">Ocean Cleanup</button>
+    <button class="zone-btn" data-zone="drone-patrol">Drone Patrol</button>
+    <button class="zone-btn" data-zone="pollution">Factory & Pollution</button>
+    <button class="zone-btn" data-zone="river">River Collection</button>
+  </div>
+
+  <!-- Live Stats -->
+  <div id="live-stats">
+    <div class="live-stat"><div class="live-stat-val" id="ls-plastic">0</div><div class="live-stat-lbl">Plastic Collected</div></div>
+    <div class="live-stat"><div class="live-stat-val" id="ls-drone">PATROL</div><div class="live-stat-lbl">Drone Status</div></div>
+    <div class="live-stat"><div class="live-stat-val" id="ls-pollution">0%</div><div class="live-stat-lbl">Pollution Level</div></div>
+    <div class="live-stat"><div class="live-stat-val" id="ls-river">0%</div><div class="live-stat-lbl">River Net Fill</div></div>
+  </div>
+
+  <!-- Info Panel -->
+  <div id="info-panel">
+    <h3 id="info-title">World Overview</h3>
+    <div id="info-content">
+      <div class="info-row"><span class="info-key">Zone</span><span class="info-val" id="info-zone">Overview</span></div>
+      <div class="info-row"><span class="info-key">Wind</span><span class="info-val" id="info-wind">12 km/h NW</span></div>
+      <div class="info-row"><span class="info-key">Waves</span><span class="info-val" id="info-waves">1.2 m</span></div>
+      <div class="info-row"><span class="info-key">Temp</span><span class="info-val" id="info-temp">24 C</span></div>
+      <div class="info-row"><span class="info-key">Active Objects</span><span class="info-val" id="info-objects">0</span></div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="world.js"></script>
+</body>
+</html>

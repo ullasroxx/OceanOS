@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="3D Drone Ocean Monitoring Simulator – Real-time UAV surveillance of marine environments" />
+  <title>Aerial Drone Ocean Monitoring | UAV Maritime Surveillance</title>
+  <link rel="stylesheet" href="style.css?v=20" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loader-ring"></div>
+    <h1>UAV MONITORING SYSTEM</h1>
+    <p class="loader-sub">Initialising Sensors &amp; Navigation...</p>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <!-- 3D Canvas -->
+  <canvas id="sim-canvas"></canvas>
+
+  <!-- Scanline / Film Grain Overlay -->
+  <div class="overlay-scanlines"></div>
+  <div class="overlay-vignette"></div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <!-- Corner Reticles -->
+    <div class="reticle top-left"></div>
+    <div class="reticle top-right"></div>
+    <div class="reticle bottom-left"></div>
+    <div class="reticle bottom-right"></div>
+
+    <!-- Center Crosshair -->
+    <div class="crosshair center">
+      <div class="cross-h"></div>
+      <div class="cross-v"></div>
+      <div class="cross-ring"></div>
+    </div>
+
+    <!-- Top Telemetry Bar -->
+    <div id="hud-top">
+      <div class="data-block" id="block-alt">
+        <span class="label">ALT</span>
+        <span class="val" id="val-alt">100 M</span>
+      </div>
+      <div class="data-block">
+        <span class="label">SPD</span>
+        <span class="val" id="val-spd">120 KM/H</span>
+      </div>
+      <div class="data-block">
+        <span class="label">BAT</span>
+        <span class="val ok" id="val-bat">98%</span>
+      </div>
+      <div class="data-block">
+        <span class="label">GPS</span>
+        <span class="val" id="val-gps">N 14°32' W 65°11'</span>
+      </div>
+      <div class="data-block" id="block-mpa">
+        <span class="label">MPA ZONE</span>
+        <span class="val ok" id="val-mpa">CLEAR</span>
+      </div>
+      <div class="data-block">
+        <span class="label">TIME</span>
+        <span class="val" id="val-time">--:--:--</span>
+      </div>
+    </div>
+
+    <!-- Dynamic Target Tracking Box -->
+    <div id="target-box" style="display:none;">
+      <div class="tb-corner tl"></div>
+      <div class="tb-corner tr"></div>
+      <div class="tb-corner bl"></div>
+      <div class="tb-corner br"></div>
+      <div id="target-info">
+        <span id="tgt-class">DETECTING...</span>
+        <span id="tgt-data">CONF 97%</span>
+      </div>
+    </div>
+
+    <!-- Side Panel: Detection Log -->
+    <div id="side-panel">
+      <h2>🛰 AI Detection Log</h2>
+      <div id="log-panel">
+        <!-- Logs injected here -->
+      </div>
+    </div>
+
+    <!-- Minimap -->
+    <div id="minimap">
+      <canvas id="minimap-canvas" width="180" height="180"></canvas>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div id="controls-panel">
+      <button id="btn-scan-bio" class="btn">🐠 Biodiversity</button>
+      <button id="btn-scan-fish" class="btn">🚢 Scan Boats</button>
+      <button id="btn-scan-plastic" class="btn">♻ Scan Plastics</button>
+      <button id="btn-cam-drone" class="btn active">📡 Drone View</button>
+      <button id="btn-cam-orbit" class="btn">🌐 Overview</button>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="main.js?v=20"></script>
+</body>
+</html>

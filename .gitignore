@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment variables (API keys)
+.env
+
+# Database (generated at runtime)
+*.db
+
+# Uploads
+backend/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Gemini agent files
+.gemini/

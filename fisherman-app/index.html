@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="FisherGuard - Smart fishing companion app for sustainable fishing, zone mapping, and waste recycling credits" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>FisherGuard | Smart Fishing Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-content">
+      <svg class="splash-icon" width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="28" stroke="#3b82f6" stroke-width="3" fill="none">
+          <animate attributeName="r" values="28;30;28" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <path d="M20 38 Q28 20 40 32 Q48 42 52 26" stroke="#60a5fa" stroke-width="2.5" fill="none"/>
+        <circle cx="25" cy="36" r="2" fill="#3b82f6"><animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite"/></circle>
+        <circle cx="40" cy="30" r="2" fill="#60a5fa"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/></circle>
+      </svg>
+      <h1>FisherGuard</h1>
+      <p>Smart Fishing Companion</p>
+      <div class="splash-loader"><div class="splash-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="app">
+    <!-- Header -->
+    <header id="app-header">
+      <div class="header-left">
+        <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="28" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+          <path d="M20 38 Q28 20 40 32 Q48 42 52 26" stroke="#60a5fa" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="header-title">FisherGuard</span>
+      </div>
+      <div class="header-right">
+        <span class="weather-badge" id="weather-badge">24C | Calm</span>
+        <button class="header-btn" id="btn-notif-header" title="Alerts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="header-badge" id="alert-count">2</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Content -->
+    <div id="app-content">
+
+      <!-- ═══ HOME TAB ═══ -->
+      <section id="tab-home" class="app-tab active">
+        <div class="welcome-card">
+          <div class="welcome-text">
+            <span class="welcome-greeting" id="greeting">Good Morning</span>
+            <h2>Captain Ahmed</h2>
+            <p class="welcome-sub">Safe seas ahead. 3 recommended zones today.</p>
+          </div>
+          <div class="welcome-stats">
+            <div class="ws"><span class="ws-val" id="home-credits">1,250</span><span class="ws-lbl">Credits</span></div>
+            <div class="ws"><span class="ws-val" id="home-nets">15</span><span class="ws-lbl">Nets Returned</span></div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-title">Quick Actions</div>
+        <div class="quick-grid">
+          <button class="quick-btn" data-goto="map"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Find Spots</span></button>
+          <button class="quick-btn" data-goto="recycle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><polyline points="7 15 12 20 17 15"/></svg><span>Return Net</span></button>
+          <button class="quick-btn" data-goto="ai"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>AI Guide</span></button>
+          <button class="quick-btn" data-goto="alerts"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Alerts</span></button>
+        </div>
+
+        <!-- Today's Best Spots -->
+        <div class="section-title">Today's Best Fishing Spots</div>
+        <div class="spots-list" id="best-spots"></div>
+
+        <!-- Safety Warnings -->
+        <div class="section-title">Active Warnings</div>
+        <div class="warnings-list" id="home-warnings"></div>
+
+        <!-- Leaderboard -->
+        <div class="section-title">Community Leaderboard</div>
+        <div class="leaderboard" id="leaderboard"></div>
+      </section>
+
+      <!-- ═══ MAP TAB ═══ -->
+      <section id="tab-map" class="app-tab">
+        <div class="map-container" id="map-container">
+          <canvas id="map-canvas"></canvas>
+          <div class="map-legend">
+            <div class="legend-item"><span class="legend-dot excellent"></span>Excellent</div>
+            <div class="legend-item"><span class="legend-dot good"></span>Good</div>
+            <div class="legend-item"><span class="legend-dot moderate"></span>Moderate</div>
+            <div class="legend-item"><span class="legend-dot restricted"></span>Restricted</div>
+          </div>
+          <div class="map-info-card" id="map-info-card" style="display:none;">
+            <h4 id="map-zone-name">Zone Name</h4>
+            <div class="map-info-row"><span>Fish Density</span><span id="map-fish-density">--</span></div>
+            <div class="map-info-row"><span>Status</span><span id="map-zone-status">--</span></div>
+            <div class="map-info-row"><span>Distance</span><span id="map-zone-distance">--</span></div>
+            <button class="btn btn-primary btn-sm" id="btn-navigate-zone">Navigate</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ RECYCLE TAB ═══ -->
+      <section id="tab-recycle" class="app-tab">
+        <div class="recycle-header">
+          <div class="credit-display">
+            <span class="credit-amount" id="total-credits">1,250</span>
+            <span class="credit-label">Total Credits Earned</span>
+          </div>
+          <div class="credit-ring">
+            <svg viewBox="0 0 100 100" class="ring-svg">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#1e2a45" stroke-width="6"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="6" stroke-dasharray="264" stroke-dashoffset="66" stroke-linecap="round" id="credit-ring-progress"/>
+            </svg>
+            <span class="ring-text">Level 3</span>
+          </div>
+        </div>
+
+        <div class="section-title">Return Fishing Net</div>
+        <div class="return-form">
+          <div class="form-group">
+            <label>Plastic Weight (kg)</label>
+            <input type="number" id="return-weight" placeholder="e.g., 5.0" step="0.1" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="return-desc" placeholder="Old fishing net, tangled lines..." />
+          </div>
+          <button class="btn btn-primary btn-block" id="btn-return-net">Return Net & Earn Credits</button>
+          <div class="return-result" id="return-result" style="display:none;"></div>
+        </div>
+
+        <div class="section-title">Reward Tiers</div>
+        <div class="tier-grid">
+          <div class="tier-card"><div class="tier-icon bronze">1</div><div class="tier-info"><strong>Beginner</strong><p>0 - 500 credits</p></div></div>
+          <div class="tier-card"><div class="tier-icon silver">2</div><div class="tier-info"><strong>Active Fisher</strong><p>500 - 1000 credits</p></div></div>
+          <div class="tier-card active"><div class="tier-icon gold">3</div><div class="tier-info"><strong>Ocean Guardian</strong><p>1000 - 2000 credits</p></div></div>
+          <div class="tier-card"><div class="tier-icon platinum">4</div><div class="tier-info"><strong>Sea Champion</strong><p>2000+ credits</p></div></div>
+        </div>
+
+        <div class="section-title">Your History</div>
+        <div class="history-list" id="return-history"></div>
+      </section>
+
+      <!-- ═══ AI TAB ═══ -->
+      <section id="tab-ai" class="app-tab">
+        <div class="ai-hero">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <h3>AI Fishing Guide</h3>
+          <p>Powered by Gemini Flash 2.5</p>
+        </div>
+
+        <div class="ai-chat" id="ai-chat">
+          <div class="chat-msg bot">
+            <div class="chat-av">AI</div>
+            <div class="chat-bbl">Hello Captain! I'm your AI fishing guide. Ask me about best fishing spots, weather conditions, sustainable practices, or anything else!</div>
+          </div>
+        </div>
+        <div class="ai-input-row">
+          <input type="text" id="ai-input" placeholder="Ask about fishing, weather, zones..." />
+          <button class="btn btn-primary" id="btn-ai-send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="quick-prompts">
+          <button class="prompt-chip" data-prompt="What are the best fishing spots today?">Best spots today</button>
+          <button class="prompt-chip" data-prompt="How can I practice sustainable fishing?">Sustainable fishing</button>
+          <button class="prompt-chip" data-prompt="What fish species are in season right now?">Fish in season</button>
+          <button class="prompt-chip" data-prompt="How do I earn more recycling credits?">Earn credits</button>
+        </div>
+
+        <!-- Image Analysis -->
+        <div class="section-title" style="margin-top: 20px;">Catch Identifier</div>
+        <div class="catch-upload">
+          <div class="upload-box" id="catch-upload-area">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Upload catch photo for AI identification</span>
+            <input type="file" id="catch-file-input" accept="image/*" hidden />
+          </div>
+          <div id="catch-preview" style="display:none;">
+            <img id="catch-img-preview" />
+            <button class="btn btn-primary btn-sm" id="btn-identify-catch">Identify with AI</button>
+          </div>
+          <div id="catch-result" style="display:none;"></div>
+          <div id="catch-loading" style="display:none;" class="ai-loading"><div class="spinner-sm"></div>Analyzing...</div>
+        </div>
+      </section>
+
+      <!-- ═══ ALERTS TAB ═══ -->
+      <section id="tab-alerts" class="app-tab">
+        <div class="section-title">Active Alerts & Warnings</div>
+        <div class="alerts-list" id="alerts-list"></div>
+        <div class="section-title" style="margin-top: 20px;">Illegal Fishing Zones</div>
+        <div class="illegal-zones" id="illegal-zones"></div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav id="bottom-nav">
+      <button class="nav-tab active" data-tab="home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-tab" data-tab="map">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        <span>Map</span>
+      </button>
+      <button class="nav-tab" data-tab="recycle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span>Recycle</span>
+      </button>
+      <button class="nav-tab" data-tab="ai">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>AI</span>
+      </button>
+      <button class="nav-tab" data-tab="alerts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span>Alerts</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

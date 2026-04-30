@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OceanOS Admin Dashboard - Unified ocean health monitoring, pollution tracking, and marine conservation management" />
+  <title>OceanOS | Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="#3b82f6" stroke-width="2" fill="none"/>
+          <path d="M6 18 Q10 12 16 16 Q22 20 26 14" stroke="#60a5fa" stroke-width="2" fill="none"/>
+          <path d="M6 22 Q10 16 16 20 Q22 24 26 18" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.6"/>
+        </svg>
+        <span class="logo-text">OceanOS</span>
+      </div>
+      <span class="badge">ADMIN</span>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">MONITORING</span>
+      <a class="nav-item active" data-tab="overview" id="nav-overview">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" data-tab="ocean-cleanup" id="nav-ocean">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12 Q6 8 12 12 Q18 16 22 12"/><path d="M2 16 Q6 12 12 16 Q18 20 22 16"/></svg>
+        Ocean Cleanup
+      </a>
+      <a class="nav-item" data-tab="river-cleanup" id="nav-river">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M8 6l4-4 4 4M7 12h10"/></svg>
+        River Cleanup
+      </a>
+      <a class="nav-item" data-tab="pollution" id="nav-pollution">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        Pollution Monitor
+      </a>
+      <a class="nav-item" data-tab="drones" id="nav-drones">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M3 7l3 3M21 7l-3 3M3 17l3-3M21 17l-3-3"/></svg>
+        Drone Patrol
+      </a>
+      <a class="nav-item" data-tab="illegal" id="nav-illegal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Illegal Fishing
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">AI & TOOLS</span>
+      <a class="nav-item" data-tab="gemini" id="nav-gemini">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Gemini AI
+      </a>
+      <a class="nav-item" data-tab="notifications" id="nav-notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+        <span class="notif-badge" id="notif-count">0</span>
+      </a>
+    </div>
+
+    <div class="nav-section sidebar-footer">
+      <a class="nav-item" href="http://localhost:3004" target="_blank" id="nav-simulation-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Open Simulation
+      </a>
+      <a class="nav-item" href="http://localhost:3003" target="_blank" id="nav-fisher-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 4l-4 4M14 8l6 6M8 16l-4 4"/><circle cx="9" cy="9" r="4"/></svg>
+        Fisher App
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Top Bar -->
+    <header id="topbar">
+      <div class="topbar-left">
+        <button id="menu-toggle" class="icon-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h1 id="page-title">Overview</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="live-indicator">
+          <span class="pulse-dot"></span>
+          LIVE
+        </div>
+        <span class="topbar-time" id="topbar-time">--:--:--</span>
+        <button class="icon-btn" id="notif-bell" title="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="bell-badge" id="bell-badge" style="display:none;">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Content Container -->
+    <div id="tab-content">
+
+      <!-- ═══════════ OVERVIEW TAB ═══════════ -->
+      <section id="tab-overview" class="tab-panel active">
+        <!-- Stat Cards -->
+        <div class="stat-grid" id="overview-stats">
+          <div class="stat-card blue">
+            <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="stat-info">
+              <span class="stat-number" id="stat-plastic-tonnes">847.3</span>
+              <span class="stat-label">Plastic Recovered (tonnes)</span>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <div class="stat-info">
+              <span class="stat-number" id="stat-lives-saved">15,420</span>
+              <span class="stat-label">Marine Lives Saved</span>
+            </div>
+          </div>
+          <div class="stat-card teal">
+            <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="stat-info">
+              <span class="stat-number" id="stat-co2-saved">2,340</span>
+              <span class="stat-label">CO2 Emissions Prevented (t)</span>
+            </div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+            <div class="stat-info">
+              <span class="stat-number" id="stat-active-alerts">3</span>
+              <span class="stat-label">Active Alerts</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-grid small">
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-area-cleaned">12,500</span>
+            <span class="stat-sm-label">sqkm Ocean Cleaned</span>
+          </div>
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-boats-intercepted">234</span>
+            <span class="stat-sm-label">Illegal Boats Caught</span>
+          </div>
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-spills-contained">18</span>
+            <span class="stat-sm-label">Oil Spills Contained</span>
+          </div>
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-reefs-protected">45</span>
+            <span class="stat-sm-label">Coral Reefs Protected</span>
+          </div>
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-nets-recycled">3,200</span>
+            <span class="stat-sm-label">Fishing Nets Recycled</span>
+          </div>
+          <div class="stat-card-sm">
+            <span class="stat-sm-val" id="stat-species-monitored">156</span>
+            <span class="stat-sm-label">Species Monitored</span>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>Plastic Collection Trend</h3>
+            <canvas id="chart-plastic-trend"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Collection by Source</h3>
+            <canvas id="chart-by-source"></canvas>
+          </div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>Debris Type Distribution</h3>
+            <canvas id="chart-debris-type"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Real-Time System Status</h3>
+            <div class="system-status" id="system-status">
+              <div class="status-item"><span class="status-dot green"></span>Ocean Cleanup Boom<span class="status-val">ACTIVE</span></div>
+              <div class="status-item"><span class="status-dot green"></span>Drone Fleet<span class="status-val">12 ONLINE</span></div>
+              <div class="status-item"><span class="status-dot yellow"></span>Pollution Buoys<span class="status-val">7/8 ONLINE</span></div>
+              <div class="status-item"><span class="status-dot green"></span>River Net System<span class="status-val">ACTIVE</span></div>
+              <div class="status-item"><span class="status-dot green"></span>Gemini AI<span class="status-val">CONNECTED</span></div>
+              <div class="status-item"><span class="status-dot green"></span>WebSocket Feed<span class="status-val" id="ws-status">CONNECTING</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="chart-card full-width">
+          <h3>Recent Activity Feed</h3>
+          <div class="activity-feed" id="activity-feed"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════ OCEAN CLEANUP TAB ═══════════ -->
+      <section id="tab-ocean-cleanup" class="tab-panel">
+        <div class="stat-grid">
+          <div class="stat-card blue"><div class="stat-info"><span class="stat-number" id="oc-total-kg">0</span><span class="stat-label">Total Plastic (kg)</span></div></div>
+          <div class="stat-card green"><div class="stat-info"><span class="stat-number" id="oc-items">0</span><span class="stat-label">Items Collected</span></div></div>
+          <div class="stat-card teal"><div class="stat-info"><span class="stat-number" id="oc-wind">12.4</span><span class="stat-label">Wind Speed (km/h)</span></div></div>
+          <div class="stat-card orange"><div class="stat-info"><span class="stat-number" id="oc-wave">1.2</span><span class="stat-label">Wave Height (m)</span></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Collection Rate</h3><canvas id="chart-oc-rate"></canvas></div>
+          <div class="chart-card"><h3>Debris Breakdown</h3><canvas id="chart-oc-breakdown"></canvas></div>
+        </div>
+        <div class="chart-card full-width">
+          <h3>Collection Ship Cycles</h3>
+          <canvas id="chart-oc-cycles"></canvas>
+        </div>
+      </section>
+
+      <!-- ═══════════ RIVER CLEANUP TAB ═══════════ -->
+      <section id="tab-river-cleanup" class="tab-panel">
+        <div class="stat-grid">
+          <div class="stat-card blue"><div class="stat-info"><span class="stat-number" id="rv-collected">0</span><span class="stat-label">Pieces Collected</span></div></div>
+          <div class="stat-card green"><div class="stat-info"><span class="stat-number" id="rv-fill">0%</span><span class="stat-label">Net Fill Level</span></div></div>
+          <div class="stat-card teal"><div class="stat-info"><span class="stat-number" id="rv-flow">2.0</span><span class="stat-label">Flow Speed (m/s)</span></div></div>
+          <div class="stat-card orange"><div class="stat-info"><span class="stat-number" id="rv-total-kg">0</span><span class="stat-label">Total Weight (kg)</span></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Fill Level Over Time</h3><canvas id="chart-rv-fill"></canvas></div>
+          <div class="chart-card"><h3>Collection by Type</h3><canvas id="chart-rv-types"></canvas></div>
+        </div>
+        <div class="chart-card full-width">
+          <h3>Flow Speed vs Collection Efficiency</h3>
+          <canvas id="chart-rv-efficiency"></canvas>
+        </div>
+      </section>
+
+      <!-- ═══════════ POLLUTION TAB ═══════════ -->
+      <section id="tab-pollution" class="tab-panel">
+        <div class="stat-grid">
+          <div class="stat-card red"><div class="stat-info"><span class="stat-number" id="pl-level">0%</span><span class="stat-label">Pollution Level</span></div></div>
+          <div class="stat-card orange"><div class="stat-info"><span class="stat-number" id="pl-oil">0 ppm</span><span class="stat-label">Oil Detected</span></div></div>
+          <div class="stat-card green"><div class="stat-info"><span class="stat-number" id="pl-quality">GOOD</span><span class="stat-label">Water Quality</span></div></div>
+          <div class="stat-card blue"><div class="stat-info"><span class="stat-number" id="pl-events">0</span><span class="stat-label">Active Events</span></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Pollution Level History</h3><canvas id="chart-pl-history"></canvas></div>
+          <div class="chart-card"><h3>Chemical Composition</h3><canvas id="chart-pl-chemicals"></canvas></div>
+        </div>
+        <div class="chart-card full-width">
+          <h3>Pollution Events Log</h3>
+          <div class="data-table-wrapper" id="pollution-events-table"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════ DRONES TAB ═══════════ -->
+      <section id="tab-drones" class="tab-panel">
+        <div class="stat-grid">
+          <div class="stat-card blue"><div class="stat-info"><span class="stat-number" id="dr-active">12</span><span class="stat-label">Active Drones</span></div></div>
+          <div class="stat-card green"><div class="stat-info"><span class="stat-number" id="dr-detections">0</span><span class="stat-label">Total Detections</span></div></div>
+          <div class="stat-card orange"><div class="stat-info"><span class="stat-number" id="dr-battery">95%</span><span class="stat-label">Avg Battery</span></div></div>
+          <div class="stat-card teal"><div class="stat-info"><span class="stat-number" id="dr-coverage">85%</span><span class="stat-label">Area Coverage</span></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Detection History</h3><canvas id="chart-dr-history"></canvas></div>
+          <div class="chart-card"><h3>Detection Types</h3><canvas id="chart-dr-types"></canvas></div>
+        </div>
+        <div class="chart-card full-width">
+          <h3>Detection Log</h3>
+          <div class="data-table-wrapper" id="detection-log-table"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════ ILLEGAL FISHING TAB ═══════════ -->
+      <section id="tab-illegal" class="tab-panel">
+        <div class="stat-grid">
+          <div class="stat-card red"><div class="stat-info"><span class="stat-number" id="il-active">0</span><span class="stat-label">Active Violations</span></div></div>
+          <div class="stat-card orange"><div class="stat-info"><span class="stat-number" id="il-mpa">0</span><span class="stat-label">In MPA Zone</span></div></div>
+          <div class="stat-card blue"><div class="stat-info"><span class="stat-number" id="il-total">0</span><span class="stat-label">Total Intercepted</span></div></div>
+          <div class="stat-card green"><div class="stat-info"><span class="stat-number" id="il-monitoring">0</span><span class="stat-label">Under Monitoring</span></div></div>
+        </div>
+        <div class="chart-card full-width">
+          <h3>Illegal Vessel Tracker</h3>
+          <div class="data-table-wrapper" id="illegal-boats-table"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════ GEMINI AI TAB ═══════════ -->
+      <section id="tab-gemini" class="tab-panel">
+        <div class="gemini-layout">
+          <div class="gemini-panel">
+            <h3>Debris Detection (Gemini Flash 2.5)</h3>
+            <p class="gemini-desc">Upload an image to analyze for marine debris, plastic waste, or ocean pollution using Google's Gemini AI.</p>
+            <div class="upload-area" id="upload-area">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drop image here or click to upload</span>
+              <input type="file" id="gemini-file-input" accept="image/*" hidden />
+            </div>
+            <div id="gemini-preview" style="display:none;">
+              <img id="gemini-img-preview" />
+              <button class="btn btn-primary" id="btn-analyze">Analyze with Gemini</button>
+            </div>
+            <div id="gemini-result" class="gemini-result" style="display:none;"></div>
+            <div id="gemini-loading" class="gemini-loading" style="display:none;">
+              <div class="spinner"></div>
+              <span>Analyzing image with Gemini Flash 2.5...</span>
+            </div>
+          </div>
+
+          <div class="gemini-panel">
+            <h3>OceanOS AI Assistant</h3>
+            <p class="gemini-desc">Ask questions about ocean health, marine conservation, fishing regulations, or cleanup operations.</p>
+            <div class="chat-container" id="chat-container">
+              <div class="chat-message bot">
+                <div class="chat-avatar">AI</div>
+                <div class="chat-bubble">Hello! I'm OceanOS AI Assistant powered by Gemini. Ask me anything about ocean health, marine conservation, or fishing regulations.</div>
+              </div>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" id="chat-input" placeholder="Ask about ocean health..." />
+              <button class="btn btn-primary" id="btn-chat-send">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ NOTIFICATIONS TAB ═══════════ -->
+      <section id="tab-notifications" class="tab-panel">
+        <div class="notif-header">
+          <h3>Notifications Center</h3>
+          <button class="btn btn-secondary" id="btn-mark-all-read">Mark All Read</button>
+        </div>
+        <div class="notif-list" id="notif-list"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
