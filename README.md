@@ -4,6 +4,9 @@
 
 # OceanOS
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-22c55e?style=for-the-badge&logo=google-chrome&logoColor=white)](https://ishaaqdev.github.io/OceanOS/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/ullasroxx/OceanOS)
+
 **A full-stack, real-time ocean health monitoring and conservation management system powered by AI.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
